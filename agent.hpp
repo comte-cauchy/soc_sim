@@ -1,7 +1,7 @@
 #ifndef AGENT_
 #define AGENT_
 #include <string>
-#include "SDL/SDL.h"
+#include "SDL2/SDL.h"
 #include "vect2d.hpp"
 using namespace std;
 

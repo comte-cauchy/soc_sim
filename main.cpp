@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include "model.hpp"
 using namespace std;
 

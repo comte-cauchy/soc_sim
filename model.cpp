@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <ctime>
-#include "SDL/SDL.h"
+#include "SDL2/SDL.h"
 #include "screen_dimensions.hpp"
 #include "model.hpp"
 #include "agent.hpp"
@@ -13,16 +13,27 @@
 using namespace std;
 
 SDL_Surface* model::screen_=NULL;
-Uint8* model::keystates_=NULL;
+SDL_Window* model::window_=NULL;
+SDL_Renderer* model::renderer_=NULL;
+const Uint8* model::keystates_=NULL;
 
 model::model(uint popsize):
 people_(popsize)
 {	
 	//srand(time(NULL));
 	SDL_Init(SDL_INIT_EVERYTHING);
-	screen_=SDL_SetVideoMode(SCREEN_WIDTH,SCREEN_HEIGHT,32,SCREEN_MODE);
+	//screen_=SDL_SetVideoMode(SCREEN_WIDTH,SCREEN_HEIGHT,32,SCREEN_MODE);
+	//SDL2
+	window_ = SDL_CreateWindow("soc_sim",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		SCREEN_WIDTH,SCREEN_HEIGHT,
+		SCREEN_MODE);
+	screen_ = SDL_GetWindowSurface(window_);
+	//renderer_ = SDL_CreateRenderer(window_,-1,SDL_RENDERER_ACCELERATED);
+	renderer_ = SDL_CreateRenderer(window_,-1,SDL_RENDERER_SOFTWARE);
 	generate_n(people_.begin(),popsize,agent());
-	keystates_ = SDL_GetKeyState( NULL );
+	keystates_ = SDL_GetKeyboardState( NULL );
 	agent::setShape("dot.bmp");
 }
 
@@ -58,7 +69,6 @@ void model::show_()
 	SDL_FillRect( screen_,
 			&screen_->clip_rect,
 			SDL_MapRGB( screen_->format, 0xFF, 0xFF, 0xFF ));
-	
 	//blit dots
 	for(vector<agent>::iterator dots=people_.begin();dots!=people_.end();++dots)
 	{
@@ -66,7 +76,7 @@ void model::show_()
 	}
 	
 	//print entire Picture
-	SDL_Flip(screen_);
+	SDL_RenderPresent(renderer_);
 }
 
 void model::update_forces_()
@@ -88,7 +98,7 @@ bool model::quit()
 {
 	//TODO: find solution, s.t. keypresses are queued and not only evaluated upon call of quit() (this way keypresses might be missed!)
 	SDL_PumpEvents();
-	if(keystates_[SDLK_q]||keystates_[SDLK_ESCAPE])
+	if(keystates_[SDL_SCANCODE_Q]||keystates_[SDL_SCANCODE_ESCAPE])
 		return true;
 	
 	SDL_Event event;

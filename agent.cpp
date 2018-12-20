@@ -2,7 +2,7 @@
 #include <string>
 #include <stdlib.h>
 #include <math.h>
-#include "SDL/SDL.h"
+#include "SDL2/SDL.h"
 #include "screen_dimensions.hpp"
 #include "agent.hpp"
 #include "vect2d.hpp"
@@ -102,9 +102,9 @@ using namespace std;
 	void agent::setShape(string filename)
 	{
 		shape_ = SDL_LoadBMP(filename.c_str());
-		shape_ = SDL_DisplayFormat(shape_);
+		//shape_ = SDL_DisplayFormat(shape_);
 		SDL_SetColorKey(shape_,
-				SDL_SRCCOLORKEY,
+				true,
 				SDL_MapRGB(shape_->format, 0xFF, 0xFF, 0xFF)
 				);
 	}

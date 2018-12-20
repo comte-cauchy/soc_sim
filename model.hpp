@@ -2,7 +2,7 @@
 #define MODEL_
 #include <vector>
 #include <string>
-#include "SDL/SDL.h"
+#include "SDL2/SDL.h"
 #include "screen_dimensions.hpp"
 #include "agent.hpp"
 
@@ -18,8 +18,10 @@ public:
 
 private:
 	vector<agent> people_;
+	static SDL_Window* window_;
 	static SDL_Surface* screen_;
-	static Uint8* keystates_;
+	static SDL_Renderer* renderer_;
+	static const Uint8* keystates_;
 
 	void show_();
 	void tick_();
